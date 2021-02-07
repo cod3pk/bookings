@@ -67,14 +67,29 @@ $result = $connection->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
     while ($row = $result->fetch_assoc()) {
-    echo "<pre>";
-        echo "<h2> Flight Number: </h2> " . $row["flight_number"]
-            . " flight_datetime " . $row["flight_datetime"]
-            . " <h3> Status:   " . "<img class='home-img' src='" . $row["status"] . ".svg" .  "'></h3>"
+
+        echo "<pre>";
+        echo "<hr>";
+        $c_datetime = date("Y-m-d h:i:s");
+        $cd_datetime = date_create($c_datetime);
+        $db_datetime = $row['flight_datetime'];
+        $db2_database = date_create($db_datetime);
+        $interval = date_diff($cd_datetime,$db2_database);
+        $datetime_diff = $interval->format('%R%a days');
+        if ($datetime_diff < 0 || $datetime_diff == 0) {
+            echo "<h2><b>Status: Flight has passed <img class='home-img' src='departed.svg'></b></h2>";
+        } else if($datetime_diff > 2) {
+            echo "<h2><b>Status: Flight is Staged <img class='home-img' src='staged.svg'></b></h2>";
+        } else if($datetime_diff > 0 && $datetime_diff <= 2){
+            echo "<h2><b>Status: Flight is Open <img class='home-img' src='open.svg'></b></h2>";
+        }
+
+        echo "<h2>Flight Number: {$row["flight_number"]} </h2>" . "<br>"
+            . " <b>Flight Date & Time: </b>" . $row["flight_datetime"]
             . " Departure  " . $row["from_airport"]
             . " • Destination Airport  " . $row["to_airport"]
             . " • The Plane  " . $row["plane"]
-            . " distance_km " . $row["distance_km"] .
+            . " distance_km " . $row["distance_km"] . "<hr>" .
             "<br><br><br>";
     }
 } else {
