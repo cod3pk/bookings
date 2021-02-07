@@ -63,7 +63,6 @@ $flight_data = $connection->query($sql);
         echo "<li><a href='login.php'>Login</a></li>";
     }
     ?>
-
 </ul>
 
 <?php
@@ -73,6 +72,7 @@ if ($flight_data->num_rows > 0) {
         echo "<pre>";
         $flight_id = $row['id'];
         $plane_id = $row['plane'];
+        $_SESSION['plane_id'] = $plane_id;
         $c_datetime = date("Y-m-d h:i:s");
         $cd_datetime = date_create($c_datetime);
         $db_datetime = $row['flight_datetime'];
@@ -90,12 +90,13 @@ if ($flight_data->num_rows > 0) {
 
             $max_seats = "";
             $query4 = "SELECT * FROM plane WHERE id='$plane_id'";
-            $res2 = mysqli_query($connection,$query4);
-            while ($row34 = mysqli_fetch_assoc($res2)){
+            $res2 = mysqli_query($connection, $query4);
+            while ($row34 = mysqli_fetch_assoc($res2)) {
                 $max_seats = $row34['seating'];
             }
 
-            if (mysqli_num_rows($res) < $max_seats) {
+            if (mysqli_num_rows($res) < $max_seats && $row['status'] != "Cancelled") {
+                echo "Seats Available: {$max_seats}    ";
                 echo "<input type='submit' name='book_seat' value='Book Seat'></form>";
             } else {
                 echo "Booking full";
