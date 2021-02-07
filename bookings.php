@@ -1,8 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['exists'])){
+    header("Location: login.php");
+}
 $connection = mysqli_connect('localhost', 'root', '', 'cooper_flights') or die("not connected");
-$sql = "SELECT * FROM flight";
-$result = $connection->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +43,7 @@ $result = $connection->query($sql);
         echo "<li><a href='index.php'>Home</a></li>";
         echo "<li><a href='profile.php'>My Profile </a></li>";
         echo "<li><a href='newbooking.php'>New Bookings</a></li>";
+        echo "<li><a href='bookings.php'>Bookings</a></li>";
         echo "<li><a href='flights.php'>Flights</a></li>";
         echo "<li><a href='logoff.php'>Logout</a></li>";
     } else {
