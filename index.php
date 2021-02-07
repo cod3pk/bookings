@@ -9,7 +9,7 @@ $result = $connection->query($sql);
 <html>
 <head>
     <style>
-        .home-img{
+        .home-img {
             height: 20px;
             width: 20px;
         }
@@ -65,40 +65,36 @@ $result = $connection->query($sql);
 
 <?php
 if ($result->num_rows > 0) {
-    // output data of each row
+    // Output data of each row
     while ($row = $result->fetch_assoc()) {
 
         echo "<pre>";
-        echo "<hr>";
         $c_datetime = date("Y-m-d h:i:s");
         $cd_datetime = date_create($c_datetime);
         $db_datetime = $row['flight_datetime'];
         $db2_database = date_create($db_datetime);
-        $interval = date_diff($cd_datetime,$db2_database);
+        $interval = date_diff($cd_datetime, $db2_database);
         $datetime_diff = $interval->format('%R%a days');
         if ($datetime_diff < 0 || $datetime_diff == 0) {
-            echo "<h2><b>Status: Flight has passed <img class='home-img' src='departed.svg'></b></h2>";
-        } else if($datetime_diff > 2) {
+            echo "<h2><b>Status: Flight has Passed <img class='home-img' src='departed.svg'></b></h2>";
+        } else if ($datetime_diff > 2) {
             echo "<h2><b>Status: Flight is Staged <img class='home-img' src='staged.svg'></b></h2>";
-        } else if($datetime_diff > 0 && $datetime_diff <= 2){
+        } else if ($datetime_diff > 0 && $datetime_diff <= 2) {
             echo "<h2><b>Status: Flight is Open <img class='home-img' src='open.svg'></b></h2>";
         }
-
         echo "<h2>Flight Number: {$row["flight_number"]} </h2>" . "<br>"
-            . " <b>Flight Date & Time: </b>" . $row["flight_datetime"]
-            . " Departure  " . $row["from_airport"]
-            . " • Destination Airport  " . $row["to_airport"]
-            . " • The Plane  " . $row["plane"]
-            . " distance_km " . $row["distance_km"] . "<hr>" .
+            . "<b>Flight Date & Time: </b>{$row["flight_datetime"]}"
+            . "<b> || Departure: </b>{$row["from_airport"]}"
+            . "<b> || Destination Airport: </b>{$row["to_airport"]}"
+            . "<b> || The Plane: </b>{$row["plane"]}"
+            . "<b> || Distance: </b>{$row["distance_km"]}" . "<hr>" .
             "<br><br><br>";
     }
 } else {
-    echo "0 results";
+    echo "<h1>No Flights Available</h1>";
 }
-
 $connection->close();
 ?>
-
 
 </body>
 </html>
